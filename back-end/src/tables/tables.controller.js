@@ -27,7 +27,7 @@ async function validateProperties(req, res, next) {
       error.status = 400;
       throw error;
     }
-    if (typeof capacity !== "number") {
+    if (typeof Number(capacity) !== "number") {
       const error = new Error(`'capacity must be a number`);
       error.status = 400;
       throw error;
@@ -106,7 +106,6 @@ async function seat(req, res) {
   const { reservation_id } = req.body.data;
   const { table_id } = req.params;
   const data = await service.seat(table_id, reservation_id);
-  console.log(data);
   res.json({
     data,
   });

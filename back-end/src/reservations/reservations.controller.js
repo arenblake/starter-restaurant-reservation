@@ -37,9 +37,8 @@ async function create(req, res) {
 }
 
 async function read(req, res) {
-  const { id } = req.params;
-  const data = await service.read(id);
-  console.log(data);
+  const { reservation_id } = req.params;
+  const data = await service.read(reservation_id);
   res.json({
     data,
   });
@@ -47,7 +46,15 @@ async function read(req, res) {
 
 async function update(req, res) {
   const data = await service.update(req.params.reservation_id, req.body.data);
-  console.log(data);
+  res.json({
+    data,
+  });
+}
+async function updateStatus(req, res) {
+  const data = await service.updateStatus(
+    req.params.reservation_id,
+    req.body.data
+  );
   res.json({
     data,
   });
@@ -58,7 +65,6 @@ async function validateProperties(req, res, next) {
   const {
     data: { reservation_date, reservation_time, people, status },
   } = res.locals;
-  console.log(reservation_date);
   try {
     if (!validateDate(reservation_date)) {
       const error = new Error(
@@ -76,7 +82,7 @@ async function validateProperties(req, res, next) {
       throw error;
     }
 
-    if (typeof people !== "number") {
+    if (typeof Number(people) !== "number") {
       const error = new Error(`people must be a number`);
       error.status = 400;
       throw error;
@@ -168,9 +174,8 @@ async function reservationExists(req, res, next) {
 }
 
 async function validStatus(req, res, next) {
-  const validStatuses = ["booked", "seated", "finished"];
+  const validStatuses = ["booked", "seated", "finished", "cancelled"];
   const { status } = req.body.data;
-  console.log(status);
   if (status && validStatuses.includes(status)) {
     return next();
   } else {
@@ -204,8 +209,16 @@ module.exports = {
   read: asyncErrorBoundary(read),
   update: [
     asyncErrorBoundary(reservationExists),
+    hasProperties(...REQUIRED_PROPERTIES),
+    asyncErrorBoundary(validateProperties),
+    // asyncErrorBoundary(notFinished),
+    // asyncErrorBoundary(validStatus),
+    asyncErrorBoundary(update),
+  ],
+  updateStatus: [
+    asyncErrorBoundary(reservationExists),
     asyncErrorBoundary(notFinished),
     asyncErrorBoundary(validStatus),
-    asyncErrorBoundary(update),
+    asyncErrorBoundary(updateStatus),
   ],
 };

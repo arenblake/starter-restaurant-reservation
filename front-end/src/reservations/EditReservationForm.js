@@ -1,18 +1,28 @@
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { createReservation } from "../utils/api";
+import { updateReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
-function ReservationForm() {
+function EditReservationForm({
+  reservation: {
+    first_name = "",
+    last_name = "",
+    mobile_number = "",
+    reservation_date = "",
+    reservation_time = "",
+    people = 0,
+  },
+  reservation_id,
+}) {
   const history = useHistory();
 
   const initialFormState = {
-    first_name: "",
-    last_name: "",
-    mobile_number: "",
-    reservation_date: "",
-    reservation_time: "",
-    people: 0,
+    first_name,
+    last_name,
+    mobile_number,
+    reservation_date,
+    reservation_time,
+    people,
   };
   const [formData, setFormData] = useState({ ...initialFormState });
   const [formErrors, setFormErrors] = useState([]);
@@ -62,7 +72,7 @@ function ReservationForm() {
 
     setFormErrors(errors);
 
-    createReservation(formData, abortController.signal)
+    updateReservation(formData, reservation_id, abortController.signal)
       .then((_) => {
         history.push(`/dashboard?date=${formData.reservation_date}`);
       })
@@ -168,4 +178,4 @@ function ReservationForm() {
   );
 }
 
-export default ReservationForm;
+export default EditReservationForm;

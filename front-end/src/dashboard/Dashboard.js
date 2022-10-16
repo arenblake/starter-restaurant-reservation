@@ -23,7 +23,6 @@ function Dashboard({ date }) {
     const abortController = new AbortController();
     setReservationsError(null);
     setTablesError(null);
-    console.log({ date });
     listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
@@ -32,10 +31,12 @@ function Dashboard({ date }) {
   }
 
   const reservationList = reservations.map((reservation) => (
-    <Reservation reservation={reservation} />
+    <Reservation key={reservation.reservation_id} reservation={reservation} />
   ));
 
-  const tableList = tables.map((table) => <Table table={table} />);
+  const tableList = tables.map((table) => (
+    <Table key={table.table_id} table={table} />
+  ));
 
   return (
     <main>
@@ -44,10 +45,11 @@ function Dashboard({ date }) {
         <h4 className="mb-0">Reservations for date: {date}</h4>
       </div>
       <ErrorAlert error={reservationsError} />
-      <div class="container">
-        <div class="row">
-          <div class="col-sm">{reservationList}</div>
-          <div class="col-sm">{tableList}</div>
+      <ErrorAlert error={tablesError} />
+      <div className="container">
+        <div className="row">
+          <div className="col-sm">{reservationList}</div>
+          <div className="col-sm">{tableList}</div>
         </div>
       </div>
     </main>
