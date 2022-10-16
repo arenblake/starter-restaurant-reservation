@@ -106,7 +106,6 @@ async function seat(req, res) {
   const { reservation_id } = req.body.data;
   const { table_id } = req.params;
   const data = await service.seat(table_id, reservation_id);
-  console.log(data);
   res.json({
     data,
   });

@@ -1,3 +1,6 @@
+import { cancelReservation } from "../utils/api";
+import { useHistory } from "react-router-dom";
+
 function Reservation({ reservation }) {
   const {
     reservation_id,
@@ -8,29 +11,59 @@ function Reservation({ reservation }) {
     mobile_number,
     status,
   } = reservation;
+
+  const history = useHistory();
+
+  function handleClick() {
+    if (
+      window.confirm(
+        "Do you want to cancel this reservation? This cannot be undone."
+      )
+    ) {
+      const abortController = new AbortController();
+
+      // Set reservation to cancelled
+      // Refresh page
+
+      cancelReservation(reservation_id, abortController.signal)
+        .then(() => history.go(0))
+        .catch((error) => console.log("error", error));
+      return () => abortController.abort();
+    }
+  }
   return (
-    <div class="card">
-      <h5 class="card-header">
+    <div className="card">
+      <h5 className="card-header">
         {first_name} {last_name}
       </h5>
-      <div class="card-body">
-        <h5 class="card-title">Time: {reservation_time}</h5>
-        <p class="card-text">People: {people}</p>
-        <p class="card-text">Phone: {mobile_number}</p>
+      <div className="card-body">
+        <h5 className="card-title">Time: {reservation_time}</h5>
+        <p className="card-text">People: {people}</p>
+        <p className="card-text">Phone: {mobile_number}</p>
         <p
           data-reservation-id-status={reservation.reservation_id}
-          class="card-text"
+          className="card-text"
         >
           Status: {status}
         </p>
         {status === "booked" && (
           <a
-            className="btn btn-primary"
             href={`/reservations/${reservation_id}/seat`}
+            className="btn btn-primary"
           >
             Seat
           </a>
         )}
+        <a href={`/reservations/${reservation_id}/edit`}>
+          <button className="btn btn-secondary">Edit</button>
+        </a>
+        <button
+          className="btn btn-danger"
+          data-reservation-id-cancel={reservation.reservation_id}
+          onClick={handleClick}
+        >
+          Cancel
+        </button>
       </div>
     </div>
   );

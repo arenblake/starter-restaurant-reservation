@@ -19,7 +19,6 @@ function NewTable() {
       ...formData,
       [target.name]: target.value,
     });
-    console.log(formData);
   };
 
   const handleSubmit = (event) => {
@@ -28,6 +27,8 @@ function NewTable() {
     setFormErrors([]);
 
     const errors = [];
+
+    formData.capacity = Number(formData.capacity);
 
     if (formData.table_name.length > 2) {
       errors.push({
