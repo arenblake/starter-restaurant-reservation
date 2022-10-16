@@ -12,7 +12,7 @@ function Search() {
   const [formErrors, setFormErrors] = useState([]);
 
   const [reservations, setReservations] = useState([]);
-  const [reservationsError, setReservationsError] = useState(null);
+  const [reservationsError, setReservationsError] = useState([]);
 
   const handleChange = ({ target }) => {
     setFormData({

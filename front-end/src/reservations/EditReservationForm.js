@@ -70,6 +70,8 @@ function EditReservationForm({
       });
     }
 
+    formData.people = Number(formData.people);
+
     setFormErrors(errors);
 
     updateReservation(formData, reservation_id, abortController.signal)

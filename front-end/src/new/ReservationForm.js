@@ -60,6 +60,8 @@ function ReservationForm() {
       });
     }
 
+    formData.people = Number(formData.people);
+
     setFormErrors(errors);
 
     createReservation(formData, abortController.signal)

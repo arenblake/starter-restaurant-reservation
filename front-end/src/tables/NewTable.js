@@ -28,6 +28,8 @@ function NewTable() {
 
     const errors = [];
 
+    formData.capacity = Number(formData.capacity);
+
     if (formData.table_name.length > 2) {
       errors.push({
         message: `Table name must be at least 2 characters long.`,

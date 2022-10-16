@@ -82,7 +82,7 @@ async function validateProperties(req, res, next) {
       throw error;
     }
 
-    if (typeof Number(people) !== "number") {
+    if (typeof people !== "number") {
       const error = new Error(`people must be a number`);
       error.status = 400;
       throw error;
@@ -206,7 +206,7 @@ module.exports = {
     validateReservationTime,
     asyncErrorBoundary(create),
   ],
-  read: asyncErrorBoundary(read),
+  read: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(read)],
   update: [
     asyncErrorBoundary(reservationExists),
     hasProperties(...REQUIRED_PROPERTIES),

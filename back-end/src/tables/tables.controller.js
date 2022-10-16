@@ -27,7 +27,7 @@ async function validateProperties(req, res, next) {
       error.status = 400;
       throw error;
     }
-    if (typeof Number(capacity) !== "number") {
+    if (typeof capacity !== "number") {
       const error = new Error(`'capacity must be a number`);
       error.status = 400;
       throw error;
