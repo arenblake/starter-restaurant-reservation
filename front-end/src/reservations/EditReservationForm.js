@@ -172,7 +172,12 @@ function EditReservationForm({
         <button className="btn btn-primary mx-2" type="submit">
           Submit
         </button>
-        <button onClick={history.goBack} className="btn btn-secondary">
+        <button
+          data-reservation-id-cancel={formData.reservation_id}
+          type="button"
+          onClick={history.goBack}
+          className="btn btn-secondary"
+        >
           Cancel
         </button>
       </form>
