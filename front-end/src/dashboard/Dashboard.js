@@ -31,11 +31,15 @@ function Dashboard({ date }) {
   }
 
   const reservationList = reservations.map((reservation) => (
-    <Reservation key={reservation.reservation_id} reservation={reservation} />
+    <Reservation
+      loadDashboard={loadDashboard}
+      key={reservation.reservation_id}
+      reservation={reservation}
+    />
   ));
 
   const tableList = tables.map((table) => (
-    <Table key={table.table_id} table={table} />
+    <Table loadDashboard={loadDashboard} key={table.table_id} table={table} />
   ));
 
   return (
@@ -48,8 +52,8 @@ function Dashboard({ date }) {
       <ErrorAlert error={tablesError} />
       <div className="container">
         <div className="row">
-          <div className="col-sm">{reservationList}</div>
-          <div className="col-sm">{tableList}</div>
+          <div className="col col-sm">{reservationList}</div>
+          <div className="col col-sm">{tableList}</div>
         </div>
       </div>
     </main>

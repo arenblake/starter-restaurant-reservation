@@ -62,7 +62,6 @@ function Seat() {
   ));
   return (
     <>
-      {JSON.stringify(tableId)}
       {formErrors.length ? displayErrors : null}
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
@@ -73,7 +72,7 @@ function Seat() {
             required
             onChange={handleChange}
             value={tableId}
-            className="form-control"
+            className="form-select"
             name="table_id"
           >
             <option value="">-- Choose Table --</option>

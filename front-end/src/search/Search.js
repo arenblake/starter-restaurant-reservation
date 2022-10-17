@@ -49,7 +49,7 @@ function Search() {
   ));
 
   const reservationList = reservations.map((reservation) => (
-    <Reservation reservation={reservation} />
+    <Reservation key={reservation.reservation_id} reservation={reservation} />
   ));
 
   const content = reservations.length ? (
@@ -67,10 +67,7 @@ function Search() {
       {formErrors.length ? displayErrors : null}
       {reservationsError.length ? displayResErrors : null}
       <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label className="form-label" htmlFor="mobile_number">
-            Mobile Number:
-          </label>
+        <div className="mb-3 form-floating">
           <input
             required
             type="text"
@@ -80,6 +77,9 @@ function Search() {
             className="form-control"
             name="mobile_number"
           ></input>
+          <label className="form-label" htmlFor="mobile_number">
+            Mobile Number:
+          </label>
         </div>
         <button className="btn btn-primary mx-2" type="submit">
           Find

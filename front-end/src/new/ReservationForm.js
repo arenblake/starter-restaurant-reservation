@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+// import { today } from "../utils/date-time";
 
 function ReservationForm() {
   const history = useHistory();
@@ -12,12 +13,13 @@ function ReservationForm() {
     mobile_number: "",
     reservation_date: "",
     reservation_time: "",
-    people: 0,
+    people: 1,
   };
   const [formData, setFormData] = useState({ ...initialFormState });
   const [formErrors, setFormErrors] = useState([]);
 
   const handleChange = ({ target }) => {
+    if (target.name === "mobile_number") addDashes(target);
     setFormData({
       ...formData,
       [target.name]: target.value,
@@ -35,6 +37,9 @@ function ReservationForm() {
     const [hours, minutes] = formData.reservation_time.split(":");
 
     const errors = [];
+
+    if (!event.target.checkValidity())
+      event.target.classList.add("was-validated");
 
     if (Date.now() > Date.parse(reservationDate)) {
       errors.push({
@@ -62,6 +67,12 @@ function ReservationForm() {
 
     formData.people = Number(formData.people);
 
+    if (formData.people < 1) {
+      errors.push({
+        message: `Bookings must include at least 1 guest`,
+      });
+    }
+
     setFormErrors(errors);
 
     createReservation(formData, abortController.signal)
@@ -77,92 +88,113 @@ function ReservationForm() {
     <ErrorAlert key={error} error={error} />
   ));
 
+  function addDashes(f) {
+    f.value = f.value.split("-").join("");
+    f.value = f.value.replace(/[^0-9-]/g, "");
+    f.value = f.value.replace(
+      /(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)/,
+      "$1$2$3-$4$5$6-$7$8$9$10"
+    );
+  }
+
   return (
     <>
       {formErrors.length ? displayErrors : null}
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label className="form-label" htmlFor="first_name">
-            First Name:
-          </label>
+      <form noValidate={true} onSubmit={handleSubmit}>
+        <div className="input-group mb-3">
           <input
             required
             type="text"
             onChange={handleChange}
             value={formData.first_name}
-            className="form-control"
+            placeholder="First Name"
+            className="form-control shadow-sm"
             name="first_name"
           ></input>
-        </div>
-        <div className="mb-3">
-          <label className="form-label" htmlFor="last_name">
-            Last Name:
-          </label>
+          {/* <label className="form-label" htmlFor="first_name">
+              First Name:
+            </label> */}
           <input
             required
             type="text"
             onChange={handleChange}
             value={formData.last_name}
-            className="form-control"
+            placeholder="Last Name"
+            className="form-control shadow-sm"
             name="last_name"
           ></input>
+          {/* <label className="form-label" htmlFor="last_name">
+              Last Name:
+            </label> */}
         </div>
-        <div className="mb-3">
-          <label className="form-label" htmlFor="mobile_number">
-            Mobile Number:
-          </label>
+        <div className="mb-3 form-floating">
           <input
             required
             type="tel"
+            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+            maxLength="12"
             onChange={handleChange}
             value={formData.mobile_number}
-            className="form-control"
+            placeholder="Mobile Number"
+            className="form-control shadow-sm"
             name="mobile_number"
           ></input>
+          {/* <label className="form-label" htmlFor="mobile_number">
+            Mobile Number:
+          </label> */}
         </div>
-        <div className="mb-3">
-          <label className="form-label" htmlFor="reservation_date">
-            Reservation Date:
-          </label>
+        <div className="mb-3 form-floating">
           <input
             required
             type="date"
             onChange={handleChange}
             value={formData.reservation_date}
-            className="form-control"
+            placeholder="Reservation Date"
+            // min={today}
+            className="form-control shadow-sm"
             name="reservation_date"
           ></input>
+          {/* <label className="form-label" htmlFor="reservation_date">
+            Reservation Date:
+          </label> */}
         </div>{" "}
-        <div className="mb-3">
-          <label className="form-label" htmlFor="reservation_time">
-            Reservation Time:
-          </label>
+        <div className="mb-3 form-floating">
           <input
             required
             type="time"
             onChange={handleChange}
             value={formData.reservation_time}
-            className="form-control"
+            placeholder="Reservation Time"
+            className="form-control shadow-sm"
             name="reservation_time"
           ></input>
+          {/* <label className="form-label" htmlFor="reservation_time">
+            Reservation Time:
+          </label> */}
         </div>{" "}
-        <div className="mb-3">
-          <label className="form-label" htmlFor="people">
-            Number of People:
-          </label>
+        <div className="mb-3 form-floating">
           <input
             required
-            type="text"
+            type="number"
+            min="1"
             onChange={handleChange}
             value={formData.people}
-            className="form-control"
+            placeholder="People"
+            className="form-control shadow-sm"
             name="people"
           ></input>
+          {/* <label className="form-label" htmlFor="people">
+            Number of People:
+          </label> */}
         </div>
         <button className="btn btn-primary mx-2" type="submit">
           Submit
         </button>
-        <button onClick={history.goBack} className="btn btn-secondary">
+        <button
+          type="button"
+          onClick={history.goBack}
+          className="btn btn-secondary"
+        >
           Cancel
         </button>
       </form>

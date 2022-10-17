@@ -88,6 +88,12 @@ async function validateProperties(req, res, next) {
       throw error;
     }
 
+    if (people < 1) {
+      const error = new Error(`people must be at least 1`);
+      error.status = 400;
+      throw error;
+    }
+
     if (status && status !== "booked") {
       const error = new Error(`status must be "booked", received: ${status}`);
       error.status = 400;

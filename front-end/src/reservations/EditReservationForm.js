@@ -28,6 +28,7 @@ function EditReservationForm({
   const [formErrors, setFormErrors] = useState([]);
 
   const handleChange = ({ target }) => {
+    if (target.name === "mobile_number") addDashes(target);
     setFormData({
       ...formData,
       [target.name]: target.value,
@@ -45,6 +46,9 @@ function EditReservationForm({
     const [hours, minutes] = formData.reservation_time.split(":");
 
     const errors = [];
+
+    if (!event.target.checkValidity())
+      event.target.classList.add("was-validated");
 
     if (Date.now() > Date.parse(reservationDate)) {
       errors.push({
@@ -72,6 +76,12 @@ function EditReservationForm({
 
     formData.people = Number(formData.people);
 
+    if (formData.people < 1) {
+      errors.push({
+        message: `Bookings must include at least 1 guest`,
+      });
+    }
+
     setFormErrors(errors);
 
     updateReservation(formData, reservation_id, abortController.signal)
@@ -87,87 +97,103 @@ function EditReservationForm({
     <ErrorAlert key={error} error={error} />
   ));
 
+  function addDashes(f) {
+    f.value = f.value.split("-").join("");
+    f.value = f.value.replace(/[^0-9-]/g, "");
+    f.value = f.value.replace(
+      /(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)/,
+      "$1$2$3-$4$5$6-$7$8$9$10"
+    );
+  }
+
   return (
     <>
       {formErrors.length ? displayErrors : null}
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label className="form-label" htmlFor="first_name">
-            First Name:
-          </label>
-          <input
-            required
-            type="text"
-            onChange={handleChange}
-            value={formData.first_name}
-            className="form-control"
-            name="first_name"
-          ></input>
+      <form noValidate={true} onSubmit={handleSubmit}>
+        <div className="input-group">
+          <div className="mb-3">
+            <input
+              required
+              type="text"
+              onChange={handleChange}
+              value={formData.first_name}
+              placeholder="First Name"
+              className="form-control shadow-sm"
+              name="first_name"
+            ></input>
+            <label className="form-label" htmlFor="first_name">
+              First Name
+            </label>
+          </div>
+          <div className="mb-3">
+            <input
+              required
+              type="text"
+              onChange={handleChange}
+              value={formData.last_name}
+              className="form-control shadow-sm"
+              name="last_name"
+            ></input>
+            <label className="form-label" htmlFor="last_name">
+              Last Name:
+            </label>
+          </div>
         </div>
-        <div className="mb-3">
-          <label className="form-label" htmlFor="last_name">
-            Last Name:
-          </label>
-          <input
-            required
-            type="text"
-            onChange={handleChange}
-            value={formData.last_name}
-            className="form-control"
-            name="last_name"
-          ></input>
-        </div>
-        <div className="mb-3">
-          <label className="form-label" htmlFor="mobile_number">
-            Mobile Number:
-          </label>
+        <div className="mb-3 form-floating">
           <input
             required
             type="tel"
             onChange={handleChange}
             value={formData.mobile_number}
-            className="form-control"
+            maxLength="12"
+            className="form-control shadow-sm"
             name="mobile_number"
           ></input>
-        </div>
-        <div className="mb-3">
-          <label className="form-label" htmlFor="reservation_date">
-            Reservation Date:
+          <label className="form-label" htmlFor="mobile_number">
+            Mobile Number:
           </label>
+        </div>
+        <div className="mb-3 form-floating">
           <input
             required
             type="date"
             onChange={handleChange}
             value={formData.reservation_date}
-            className="form-control"
+            placeholder="Reservation Date"
+            className="form-control shadow-sm"
             name="reservation_date"
           ></input>
-        </div>{" "}
-        <div className="mb-3">
-          <label className="form-label" htmlFor="reservation_time">
-            Reservation Time:
+          <label className="form-label" htmlFor="reservation_date">
+            Reservation Date:
           </label>
+        </div>{" "}
+        <div className="mb-3 form-floating">
           <input
             required
             type="time"
             onChange={handleChange}
             value={formData.reservation_time}
-            className="form-control"
+            placeholder="Reservation Time"
+            className="form-control shadow-sm"
             name="reservation_time"
           ></input>
+          <label className="form-label" htmlFor="reservation_time">
+            Reservation Time:
+          </label>
         </div>{" "}
-        <div className="mb-3">
+        <div className="mb-3 form-floating">
+          <input
+            required
+            type="number"
+            min="1"
+            onChange={handleChange}
+            value={formData.people}
+            className="form-control shadow-sm"
+            name="people"
+          ></input>
           <label className="form-label" htmlFor="people">
             Number of People:
           </label>
-          <input
-            required
-            type="text"
-            onChange={handleChange}
-            value={formData.people}
-            className="form-control"
-            name="people"
-          ></input>
         </div>
         <button className="btn btn-primary mx-2" type="submit">
           Submit

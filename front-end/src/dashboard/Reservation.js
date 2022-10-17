@@ -1,7 +1,6 @@
 import { cancelReservation } from "../utils/api";
-import { useHistory } from "react-router-dom";
 
-function Reservation({ reservation }) {
+function Reservation({ reservation, loadDashboard }) {
   const {
     reservation_id,
     first_name,
@@ -12,8 +11,6 @@ function Reservation({ reservation }) {
     status,
   } = reservation;
 
-  const history = useHistory();
-
   function handleClick() {
     if (
       window.confirm(
@@ -22,17 +19,17 @@ function Reservation({ reservation }) {
     ) {
       const abortController = new AbortController();
 
-      // Set reservation to cancelled
-      // Refresh page
-
       cancelReservation(reservation_id, abortController.signal)
-        .then(() => history.go(0))
+        .then(loadDashboard)
         .catch((error) => console.log("error", error));
       return () => abortController.abort();
     }
   }
   return (
-    <div className="card">
+    <div
+      className="card mb-3 shadow-sm"
+      // style={{ height: "18rem" }}
+    >
       <h5 className="card-header">
         {first_name} {last_name}
       </h5>
@@ -49,13 +46,13 @@ function Reservation({ reservation }) {
         {status === "booked" && (
           <a
             href={`/reservations/${reservation_id}/seat`}
-            className="btn btn-primary"
+            className="btn btn-primary mr-2"
           >
             Seat
           </a>
         )}
         <a href={`/reservations/${reservation_id}/edit`}>
-          <button className="btn btn-secondary">Edit</button>
+          <button className="btn btn-secondary mr-2">Edit</button>
         </a>
         <button
           className="btn btn-danger"
