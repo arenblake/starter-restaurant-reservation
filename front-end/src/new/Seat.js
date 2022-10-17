@@ -72,7 +72,7 @@ function Seat() {
             required
             onChange={handleChange}
             value={tableId}
-            className="form-select"
+            className="form-control"
             name="table_id"
           >
             <option value="">-- Choose Table --</option>
