@@ -81,12 +81,6 @@ function Reservation({ reservation, loadDashboard }) {
             <p className="col card-text text-right">People: {people}</p>
           </div>
           <div className="row-md d-flex justify-content-between">
-            {/* <p
-              data-reservation-id-status={reservation.reservation_id}
-              className="col card-text"
-            >
-              Status: {status}
-            </p> */}
             <p
               data-reservation-id-status={reservation.reservation_id}
               className="col card-text mb-0 pl-0"
@@ -109,7 +103,6 @@ function Reservation({ reservation, loadDashboard }) {
           </div>
         </div>
       </div>
-      {/* <div class="card-footer bg-transparent border-success"> */}{" "}
       {status === "booked" && (
         <a
           href={`/reservations/${reservation_id}/seat`}
