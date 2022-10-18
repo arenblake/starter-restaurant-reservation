@@ -62,7 +62,6 @@ function Seat() {
   ));
   return (
     <>
-      {JSON.stringify(tableId)}
       {formErrors.length ? displayErrors : null}
       <form onSubmit={handleSubmit}>
         <div className="mb-3">

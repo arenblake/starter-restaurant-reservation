@@ -1,12 +1,11 @@
-import { useState, useEffect } from "react";
-import { useParams } from "react-router";
+import { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { updateReservation, readReservation } from "../utils/api";
+import { createReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import formatReservationDate from "../utils/format-reservation-date";
 import Form from "../form/Form";
+// import { today } from "../utils/date-time";
 
-function EditReservationForm() {
+function NewReservation() {
   const history = useHistory();
 
   const initialFormState = {
@@ -15,26 +14,10 @@ function EditReservationForm() {
     mobile_number: "",
     reservation_date: "",
     reservation_time: "",
-    people: "",
+    people: 1,
   };
   const [formData, setFormData] = useState({ ...initialFormState });
   const [formErrors, setFormErrors] = useState([]);
-
-  const { reservation_id } = useParams();
-
-  useEffect(() => {
-    async function loadReservation() {
-      const abortController = new AbortController();
-      const reservation = await readReservation(
-        reservation_id,
-        abortController.signal
-      );
-      setFormData({ ...formatReservationDate(reservation) });
-      return () => abortController.abort();
-    }
-
-    loadReservation();
-  }, [reservation_id]);
 
   const handleChange = ({ target }) => {
     if (target.name === "mobile_number") addDashes(target);
@@ -94,7 +77,7 @@ function EditReservationForm() {
     setFormErrors(errors);
 
     !errors.length &&
-      updateReservation(formData, reservation_id, abortController.signal)
+      createReservation(formData, abortController.signal)
         .then((_) => {
           history.push(`/dashboard?date=${formData.reservation_date}`);
         })
@@ -128,4 +111,4 @@ function EditReservationForm() {
   );
 }
 
-export default EditReservationForm;
+export default NewReservation;
