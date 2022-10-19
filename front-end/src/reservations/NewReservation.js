@@ -88,7 +88,7 @@ function NewReservation() {
   };
 
   let displayErrors = formErrors.map((error) => (
-    <ErrorAlert key={error} error={error} />
+    <ErrorAlert key={error.message} error={error} />
   ));
 
   return (
