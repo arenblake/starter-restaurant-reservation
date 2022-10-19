@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
+import addDashes from "../utils/addDashes";
 import ErrorAlert from "../layout/ErrorAlert";
 import Form from "../form/Form";
 // import { today } from "../utils/date-time";
@@ -90,17 +91,11 @@ function NewReservation() {
     <ErrorAlert key={error} error={error} />
   ));
 
-  function addDashes(f) {
-    f.value = f.value.split("-").join("");
-    f.value = f.value.replace(/[^0-9-]/g, "");
-    f.value = f.value.replace(
-      /(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)/,
-      "$1$2$3-$4$5$6-$7$8$9$10"
-    );
-  }
-
   return (
     <>
+      <div className="text-center mt-3 mb-5">
+        <h1>Create New Booking</h1>
+      </div>
       {displayErrors}
       <Form
         formData={formData}

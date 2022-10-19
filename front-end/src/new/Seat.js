@@ -62,30 +62,37 @@ function Seat() {
   ));
   return (
     <>
+      <div className="text-center mt-3 mb-5">
+        <h1>Select A Table</h1>
+      </div>
       {formErrors.length ? displayErrors : null}
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label className="form-label" htmlFor="table">
+      <div className="d-flex justify-content-center">
+        <form className="form-inline" onSubmit={handleSubmit}>
+          <label className="form-label sr-only" htmlFor="table">
             Table Name:
           </label>
           <select
             required
             onChange={handleChange}
             value={tableId}
-            className="form-control"
+            className="form-control shadow-sm"
             name="table_id"
           >
             <option value="">-- Choose Table --</option>
             {tableList}
           </select>
-        </div>
-        <button className="btn btn-primary mx-2" type="submit">
-          Submit
-        </button>
-        <button onClick={history.goBack} className="btn btn-secondary">
-          Cancel
-        </button>
-      </form>
+          <button className="btn btn-primary mx-2" type="submit">
+            Submit
+          </button>
+          <button
+            onClick={history.goBack}
+            type="button"
+            className="btn btn-secondary"
+          >
+            Cancel
+          </button>
+        </form>
+      </div>
     </>
   );
 }
