@@ -28,12 +28,32 @@ function Reservation({ reservation, loadDashboard }) {
 
   const statusElement =
     status === "booked" ? (
-      <div className="btn border border-success rounded text-success">
+      <div
+        style={{ cursor: "default" }}
+        className="btn border border-success rounded text-success"
+      >
         Booked
       </div>
-    ) : (
-      <div className="btn border border-warning rounded text-warning">
+    ) : status === "seated" ? (
+      <div
+        style={{ cursor: "default" }}
+        className="btn border border-warning rounded text-warning"
+      >
         Seated
+      </div>
+    ) : status === "cancelled" ? (
+      <div
+        style={{ cursor: "default" }}
+        className="btn border border-danger rounded text-danger"
+      >
+        Cancelled
+      </div>
+    ) : (
+      <div
+        style={{ cursor: "default" }}
+        className="btn border border-muted rounded text-muted"
+      >
+        Finished
       </div>
     );
   return (
@@ -106,7 +126,7 @@ function Reservation({ reservation, loadDashboard }) {
       {status === "booked" && (
         <a
           href={`/reservations/${reservation_id}/seat`}
-          // className="btn btn-primary mr-2"
+          role="button"
           className="card-footer bg-primary text-decoration-none"
         >
           <h5 className="text-white text-center text-decoration-none mb-1">

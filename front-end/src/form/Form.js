@@ -3,9 +3,8 @@ import { useHistory } from "react-router-dom";
 function Form({ formData, handleChange, handleSubmit }) {
   const history = useHistory();
   return (
-    <>
-      {/* {formErrors.length ? displayErrors : null} */}
-      <form noValidate={true} onSubmit={handleSubmit}>
+    <div className="d-flex justify-content-center">
+      <form className="w-50" noValidate={true} onSubmit={handleSubmit}>
         <div className="input-group mb-3">
           <input
             required
@@ -84,7 +83,7 @@ function Form({ formData, handleChange, handleSubmit }) {
           Cancel
         </button>
       </form>
-    </>
+    </div>
   );
 }
 
