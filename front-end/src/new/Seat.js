@@ -8,7 +8,7 @@ function Seat() {
   const { reservation_id } = useParams();
 
   const [tables, setTables] = useState([]);
-  const [tableId, setTableId] = useState(null);
+  const [tableId, setTableId] = useState("");
   const [formErrors, setFormErrors] = useState([]);
 
   useEffect(loadTables, []);

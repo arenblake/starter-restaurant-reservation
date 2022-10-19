@@ -3,6 +3,7 @@ import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import Reservation from "./Reservation";
 import Table from "./Table";
+import DateNavigation from "./DateNavigation";
 
 /**
  * Defines the dashboard page.
@@ -46,6 +47,7 @@ function Dashboard({ date }) {
     <main>
       <div className="text-center mt-3 mb-5">
         <h1>Dashboard</h1>
+        <DateNavigation date={date} />
       </div>
       <ErrorAlert error={reservationsError} />
       <ErrorAlert error={tablesError} />
@@ -53,6 +55,7 @@ function Dashboard({ date }) {
         <div className="row">
           <div className="col col-sm">
             <h4 className="mb-4 text-center">Reservations for: {date}</h4>
+            {/* <DateNavigation date={date} /> */}
             {reservationList}
           </div>
           <div className="col col-sm">
